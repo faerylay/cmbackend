@@ -1,16 +1,19 @@
-import http from 'http';
-import moment from 'moment';
+const express = require('express');
+const { movies, series } = require('./routes');
+const cors = require('cors');
+const createConnect = require('./database');
 const port = 4000;
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const hostname = '127.0.0.1';
-const server = http.createServer((req, res, next) => {
-	res.statusCode = 200;
+app.use('/movies', movies);
+app.use('/series', series);
 
-	res.setHeader('Content-Type', 'text/plain');
-
-	res.end('Hello World');
+app.listen(port, () => {
+	console.log(`Server running at http://localhost:${port}`);
 });
 
-server.listen(port, hostname, () => {
-	console.log(`Server running at http://${hostname}:${port}`);
-});
+
+createConnect();
